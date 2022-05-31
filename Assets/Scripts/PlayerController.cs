@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Debug = System.Diagnostics.Debug;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,14 +14,21 @@ public class PlayerController : MonoBehaviour
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
     private static readonly int AnimRollTrigger = Animator.StringToHash("rollTrigger");
+    private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
+    private static readonly int AnimIsAttacking = Animator.StringToHash("isAttacking");
+    private static readonly int AnimRelativeAttackAngle = Animator.StringToHash("relativeAttackAngle");
     
     private Rigidbody2D _rb;
     private Animator _animator;
 
     private bool _isRolling;
     private float _rollCooldown = 0.5f;
-    private float _lastRoll;
+    private float _lastRollTime;
     private Vector2 _lastDirection = Vector2.right;
+
+    private bool _isAttacking;
+    private float _attackCooldown = 0.5f;
+    private float _lastAttackTime;
 
     private void Start()
     {
@@ -30,10 +39,20 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (!_isRolling && Input.GetKeyDown(KeyCode.Space)) {
-            if (Time.time - _lastRoll > _rollCooldown) {
-                _lastRoll = Time.time;
+            if (Time.time - _lastRollTime > _rollCooldown) {
+                _lastRollTime = Time.time;
                 _isRolling = true;
                 _animator.SetTrigger(AnimRollTrigger);
+            }
+        }
+
+        if (!_isRolling && Input.GetMouseButtonDown(0)) {
+            if (Time.time - _lastAttackTime > _attackCooldown) {
+                _lastAttackTime = Time.time;
+                _isAttacking = true;
+                SetAttackDirection();
+                _animator.SetTrigger(AnimAttackTrigger);
+                _animator.SetBool(AnimIsAttacking, _isAttacking);
             }
         }
     }
@@ -59,8 +78,25 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = movement;
     }
 
+    private void SetAttackDirection()
+    {
+        Debug.Assert(Camera.main != null, "Camera.main != null");
+        
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 relative = mousePos - transform.position;
+        float angle = 2.0f * math.PI - math.fmod(math.atan2(relative.y, relative.x) + 1.5f * math.PI, 2.0f * math.PI);
+        _animator.SetFloat(AnimRelativeAttackAngle, math.degrees(angle));
+        Debug.Print("Angle: " + angle);
+    }
+
     public void RollAnimationEnded()
     {
         _isRolling = false;
+    }
+
+    public void AttackAnimationEnded()
+    {
+        _isAttacking = false;
+        _animator.SetBool(AnimIsAttacking, _isAttacking);
     }
 }
