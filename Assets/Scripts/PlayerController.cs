@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     private static readonly int AnimRollTrigger = Animator.StringToHash("rollTrigger");
     private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
     private static readonly int AnimIsAttacking = Animator.StringToHash("isAttacking");
-    private static readonly int AnimRelativeAttackAngle = Animator.StringToHash("relativeAttackAngle");
     
     private Rigidbody2D _rb;
     private Animator _animator;
@@ -50,7 +49,6 @@ public class PlayerController : MonoBehaviour
             if (Time.time - _lastAttackTime > _attackCooldown) {
                 _lastAttackTime = Time.time;
                 _isAttacking = true;
-                SetAttackDirection();
                 _animator.SetTrigger(AnimAttackTrigger);
                 _animator.SetBool(AnimIsAttacking, _isAttacking);
             }
@@ -76,17 +74,6 @@ public class PlayerController : MonoBehaviour
         }
         
         _rb.velocity = movement;
-    }
-
-    private void SetAttackDirection()
-    {
-        Debug.Assert(Camera.main != null, "Camera.main != null");
-        
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 relative = mousePos - transform.position;
-        float angle = 2.0f * math.PI - math.fmod(math.atan2(relative.y, relative.x) + 1.5f * math.PI, 2.0f * math.PI);
-        _animator.SetFloat(AnimRelativeAttackAngle, math.degrees(angle));
-        Debug.Print("Angle: " + angle);
     }
 
     public void RollAnimationEnded()
