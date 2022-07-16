@@ -71,6 +71,15 @@ TextureImporter:
   - first:
       213: -868762800048534585
     second: pillar_wall
+  - first:
+      213: -6487126016164858639
+    second: wall_6
+  - first:
+      213: 4690310226930030548
+    second: wall_7
+  - first:
+      213: 8059560349256711922
+    second: tile_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -650,6 +659,69 @@ TextureImporter:
       bones: []
       spriteID: 7cb880516d881f3f0800000000000000
       internalID: -868762800048534585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wall_6
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 192
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f47c41324919f5a0800000000000000
+      internalID: -6487126016164858639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wall_7
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 176
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d7db821d44571140800000000000000
+      internalID: 4690310226930030548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile_2
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 160
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fef44faf6f49df60800000000000000
+      internalID: 8059560349256711922
       vertices: []
       indices: 
       edges: []
