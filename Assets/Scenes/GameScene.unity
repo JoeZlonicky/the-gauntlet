@@ -4662,7 +4662,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &167282652
 GameObject:
   m_ObjectHideFlags: 0
@@ -7645,6 +7645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rollSpeed: 10
+  camera: {fileID: 519420031}
 --- !u!95 &1182888555
 Animator:
   serializedVersion: 3

@@ -10,12 +10,15 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float rollSpeed;
+    public Camera camera; // For determining attack direction
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
     private static readonly int AnimRollTrigger = Animator.StringToHash("rollTrigger");
     private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
     private static readonly int AnimIsAttacking = Animator.StringToHash("isAttacking");
+    private static readonly int AnimForceLeftDirection = Animator.StringToHash("forceLeftDirection"); 
+    private static readonly int AnimForceRightDirection = Animator.StringToHash("forceRightDirection"); 
     
     private Rigidbody2D _rb;
     private Animator _animator;
@@ -37,7 +40,13 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (!_isRolling && Input.GetKeyDown(KeyCode.Space)) {
+        // Can't attack or roll while doing either
+        if (_isAttacking || _isRolling) {
+            return;
+        }
+        
+        // Roll
+        if (Input.GetKeyDown(KeyCode.Space)) {
             if (Time.time - _lastRollTime > _rollCooldown) {
                 _lastRollTime = Time.time;
                 _isRolling = true;
@@ -45,12 +54,14 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!_isRolling && Input.GetMouseButtonDown(0)) {
+        // Attack
+        if (Input.GetMouseButtonDown(0)) {
             if (Time.time - _lastAttackTime > _attackCooldown) {
                 _lastAttackTime = Time.time;
                 _isAttacking = true;
                 _animator.SetTrigger(AnimAttackTrigger);
                 _animator.SetBool(AnimIsAttacking, _isAttacking);
+                FaceAttackDirection();
             }
         }
     }
@@ -76,6 +87,19 @@ public class PlayerController : MonoBehaviour
         _rb.velocity = movement;
     }
 
+    private void FaceAttackDirection()
+    {
+        _animator.ResetTrigger(AnimForceRightDirection);
+        _animator.ResetTrigger(AnimForceLeftDirection);
+        float mouseDistance = camera.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x;
+        if (mouseDistance >= 0.0) {
+            _animator.SetTrigger(AnimForceRightDirection);
+        }
+        else {
+            _animator.SetTrigger(AnimForceLeftDirection);
+        }
+    }
+    
     public void RollAnimationEnded()
     {
         _isRolling = false;
