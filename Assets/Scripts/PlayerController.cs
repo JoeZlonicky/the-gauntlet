@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float rollSpeed;
-    public Camera camera; // For determining attack direction
+    public new Camera camera; // For determining attack direction
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
