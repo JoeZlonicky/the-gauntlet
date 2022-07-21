@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Debug = System.Diagnostics.Debug;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed;
+    public float moveSpeed;
     public float rollSpeed;
     public new Camera camera; // For determining attack direction
     
@@ -74,7 +75,7 @@ public class PlayerController : MonoBehaviour
         else {
             float xInput = Input.GetAxisRaw("Horizontal");
             float yInput = Input.GetAxisRaw("Vertical");
-            movement = new Vector2(xInput, yInput).normalized * speed;
+            movement = new Vector2(xInput, yInput).normalized * moveSpeed;
         }
         
         _animator.SetBool(AnimIsMoving,  _rb.velocity.magnitude > 0.1);
