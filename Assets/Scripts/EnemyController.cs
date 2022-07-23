@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
     private static readonly int AnimDeathTrigger = Animator.StringToHash("deathTrigger");
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
+    private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
     
     private Rigidbody2D _rb;
     private Animator _animator;
@@ -17,22 +18,24 @@ public class EnemyController : MonoBehaviour
     private const float Speed = 2.5f;
     private const int MaxHealth = 2;
     private const float KnockbackRecoveryRate = 0.15f;
-    private const float MaxClosenessToPlayer = 0.35f;
+    private const float MaxClosenessToPlayer = 0.2f;
     private int _health;
-    private bool _dead = false;
+    private bool _isDead;
     
     private Vector2 _knockback;
     
     public void TakeDamage(int amount, Vector2 hitKnockback = default)
     {
+        if (_isDead) return;
+        
         _health -= amount;
+        _animator.SetTrigger(AnimHitTrigger);
         if (_health <= 0) {
-            _dead = true;
+            _isDead = true;
             _animator.SetTrigger(AnimDeathTrigger);
         }
         else {
             _knockback = hitKnockback;
-            _animator.SetTrigger(AnimHitTrigger);
         }
     }
 
@@ -50,7 +53,7 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_dead) {
+        if (_isDead) {
             _rb.velocity = Vector2.zero;
             return;
         }
@@ -71,6 +74,7 @@ public class EnemyController : MonoBehaviour
         movement += _knockback;
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
+        _animator.SetFloat(AnimXVelocity, _rb.velocity.x);
         _rb.velocity = movement;
     }
 }
