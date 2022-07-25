@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
 {
     public PlayerController player;
+    public int maxHealth = 2;
+    public float speed = 2.5f;
     
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
     private static readonly int AnimDeathTrigger = Animator.StringToHash("deathTrigger");
@@ -14,9 +17,8 @@ public class EnemyController : MonoBehaviour
     
     private Rigidbody2D _rb;
     private Animator _animator;
-
-    private const float Speed = 2.5f;
-    private const int MaxHealth = 2;
+    public ParticleSystem hitParticlesPrefab;
+    
     private const float KnockbackRecoveryRate = 0.15f;
     private const float MaxClosenessToPlayer = 0.2f;
     private int _health;
@@ -29,6 +31,7 @@ public class EnemyController : MonoBehaviour
         if (_isDead) return;
         
         _health -= amount;
+        Instantiate(hitParticlesPrefab, transform);
         _animator.SetTrigger(AnimHitTrigger);
         if (_health <= 0) {
             _isDead = true;
@@ -48,7 +51,7 @@ public class EnemyController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _health = MaxHealth;
+        _health = maxHealth;
     }
 
     private void FixedUpdate()
@@ -63,7 +66,7 @@ public class EnemyController : MonoBehaviour
         if (player) {
             Vector2 vectorToPlayer = (player.transform.position - transform.position);
             if (vectorToPlayer.magnitude > MaxClosenessToPlayer) {
-                movement = vectorToPlayer.normalized * Speed;
+                movement = vectorToPlayer.normalized * speed;
             }
             _animator.SetBool(AnimIsMoving, true);
         }

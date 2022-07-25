@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float rollSpeed;
     public new Camera camera; // For determining attack direction
+    public ParticleSystem hitParticlesPrefab;
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
@@ -129,6 +130,7 @@ public class PlayerController : MonoBehaviour
         
         _lastTimeHit = Time.time;
         _health -= amount;
+        Instantiate(hitParticlesPrefab, transform);
         _animator.SetTrigger(AnimHitTrigger);
         if (_health <= 0) {
             _isDead = true;

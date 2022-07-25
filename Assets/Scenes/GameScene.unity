@@ -236,6 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1182888554}
+  maxHealth: 2
+  speed: 2.5
+  hitParticlesPrefab: {fileID: 1082467921161336757, guid: dd981909f8dd57b41be7232ed25087ab, type: 3}
 --- !u!95 &68243244
 Animator:
   serializedVersion: 3
@@ -17495,6 +17498,7 @@ MonoBehaviour:
   moveSpeed: 5
   rollSpeed: 10
   camera: {fileID: 519420031}
+  hitParticlesPrefab: {fileID: 1082467921161336757, guid: dd981909f8dd57b41be7232ed25087ab, type: 3}
 --- !u!95 &1182888555
 Animator:
   serializedVersion: 3
