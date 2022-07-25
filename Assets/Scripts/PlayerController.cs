@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     
     private Vector2 _lastDirection = Vector2.right;
     private Vector2 _knockback;
-    private bool _isDead;
+    [HideInInspector] public bool isDead;
 
     private void Start()
     {
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // Can't attack or roll while doing either
-        if (_isAttacking || _isRolling || _isDead) {
+        if (_isAttacking || _isRolling || isDead) {
             return;
         }
         
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (_isDead) {
+        if (isDead) {
             _rb.velocity = Vector2.zero;
             _animator.SetTrigger(AnimDeathTrigger);  // Fix bug where animation doesn't play if during a transition
             return;
@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int amount, Vector2 hitKnockback = default)
     {
-        if (Time.time - _lastTimeHit < HitInvincibilityTime || _isDead || _isRolling) {
+        if (Time.time - _lastTimeHit < HitInvincibilityTime || isDead || _isRolling) {
             return;
         }
         
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
         Instantiate(hitParticlesPrefab, transform);
         _animator.SetTrigger(AnimHitTrigger);
         if (_health <= 0) {
-            _isDead = true;
+            isDead = true;
             _animator.SetTrigger(AnimDeathTrigger);
         }
         else {

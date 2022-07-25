@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
 {
+    public Transform walkToTarget;
     public PlayerController player;
     public int maxHealth = 2;
     public float speed = 2.5f;
@@ -20,7 +21,7 @@ public class EnemyController : MonoBehaviour
     public ParticleSystem hitParticlesPrefab;
     
     private const float KnockbackRecoveryRate = 0.15f;
-    private const float MaxClosenessToPlayer = 0.2f;
+    private const float MarginForReachingTarget = 0.2f;
     private int _health;
     private bool _isDead;
     
@@ -56,24 +57,25 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isDead) {
+        if (_isDead || (walkToTarget == null && player == null)) {
             _rb.velocity = Vector2.zero;
+            _animator.SetBool(AnimIsMoving, false);
             return;
         }
         
         Vector2 movement = default;
 
-        if (player) {
-            Vector2 vectorToPlayer = (player.transform.position - transform.position);
-            if (vectorToPlayer.magnitude > MaxClosenessToPlayer) {
-                movement = vectorToPlayer.normalized * speed;
-            }
-            _animator.SetBool(AnimIsMoving, true);
-        }
-        else {
-            _animator.SetBool(AnimIsMoving, false);
+        Vector3 target = walkToTarget ? walkToTarget.position : player.transform.position;
+        Vector2 vectorToTarget = (target - transform.position);
+        
+        if (vectorToTarget.magnitude > MarginForReachingTarget) {
+            movement = vectorToTarget.normalized * speed;
+        } else if (walkToTarget) {
+            walkToTarget = null;
         }
         
+        _animator.SetBool(AnimIsMoving, walkToTarget != null || player != null);
+
         movement += _knockback;
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
