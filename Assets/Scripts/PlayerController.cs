@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     public HealthBar healthBar;
     public ParticleSystem hitParticlesPrefab;
 
-    [SerializeField] UnityEvent onDeath;
+    public UnityEvent onDeath;
+    public UnityEvent onDeathFinished;
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
@@ -162,6 +163,6 @@ public class PlayerController : MonoBehaviour
 
     public void DeathFinished()
     {
-        Destroy(gameObject);
+        onDeathFinished.Invoke();
     }
 }

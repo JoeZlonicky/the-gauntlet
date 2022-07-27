@@ -27,6 +27,7 @@ public class EnemyController : MonoBehaviour
     private const float MarginForReachingTarget = 0.2f;
     private int _health;
     private bool _isDead;
+    private bool _playerDeathFinished;
     
     private Vector2 _knockback;
     
@@ -57,13 +58,13 @@ public class EnemyController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _health = maxHealth;
+        player.onDeathFinished.AddListener(OnPlayerDeathFinished);
     }
 
     private void FixedUpdate()
     {
-        if (_isDead || (walkToTarget == null && player == null)) {
+        if (_isDead || (walkToTarget == null && player == null || _playerDeathFinished)) {
             _rb.velocity = Vector2.zero;
-            _animator.SetBool(AnimIsMoving, false);
             return;
         }
         
@@ -85,5 +86,11 @@ public class EnemyController : MonoBehaviour
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
         _rb.velocity = movement;
+    }
+
+    private void OnPlayerDeathFinished()
+    {
+        _playerDeathFinished = true;
+        player.onDeathFinished.RemoveListener(OnPlayerDeathFinished);
     }
 }
