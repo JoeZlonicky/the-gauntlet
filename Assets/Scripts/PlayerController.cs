@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UIElements;
-using Debug = System.Diagnostics.Debug;
+using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,7 +15,10 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public float rollSpeed;
     public new Camera camera; // For determining attack direction
+    public HealthBar healthBar;
     public ParticleSystem hitParticlesPrefab;
+
+    [SerializeField] UnityEvent onDeath;
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
@@ -26,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
     
     private const float RollCooldown = 0.5f;
-    private const float KnockbackRecoveryRate = 0.25f;
+    private const float KnockbackRecoveryRate = 0.15f;
     private const float AttackCooldown = 0.5f;
     private const float HitInvincibilityTime = 0.5f;
 
@@ -96,16 +101,16 @@ public class PlayerController : MonoBehaviour
             movement = new Vector2(xInput, yInput).normalized * moveSpeed;
         }
         
+        if (!_isRolling && movement.magnitude > 0.1) {
+            _lastDirection = movement.normalized;
+            _animator.SetFloat(AnimXVelocity, movement.x);
+        }
+        
         movement += _knockback;
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
         _animator.SetBool(AnimIsMoving,  _rb.velocity.magnitude > 0.1);
-        _animator.SetFloat(AnimXVelocity, _rb.velocity.x);
 
-        if (!_isRolling && movement.magnitude > 0.1) {
-            _lastDirection = movement.normalized;
-        }
-        
         _rb.velocity = movement;
     }
 
@@ -129,12 +134,15 @@ public class PlayerController : MonoBehaviour
         }
         
         _lastTimeHit = Time.time;
-        _health -= amount;
+        _health = Math.Max(_health - 1, 0);
+        healthBar.SetHearts(_health);
+        
         Instantiate(hitParticlesPrefab, transform);
         _animator.SetTrigger(AnimHitTrigger);
         if (_health <= 0) {
             isDead = true;
             _animator.SetTrigger(AnimDeathTrigger);
+            onDeath.Invoke();
         }
         else {
             _knockback = hitKnockback;

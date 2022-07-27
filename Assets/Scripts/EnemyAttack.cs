@@ -21,7 +21,7 @@ public class EnemyAttack : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player")) {
             PlayerController player = col.transform.GetComponent<PlayerController>();
-            Vector2 knockback = (player.transform.position - transform.position).normalized * knockbackAmount;
+            Vector2 knockback = ((Vector2)(player.transform.position - transform.position)).normalized * knockbackAmount;
             player.TakeDamage(damage, knockback);
         }
     }

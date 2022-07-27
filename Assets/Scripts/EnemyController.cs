@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
@@ -10,6 +11,8 @@ public class EnemyController : MonoBehaviour
     public PlayerController player;
     public int maxHealth = 2;
     public float speed = 2.5f;
+
+    public UnityEvent onDeath;
     
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
     private static readonly int AnimDeathTrigger = Animator.StringToHash("deathTrigger");
@@ -37,6 +40,7 @@ public class EnemyController : MonoBehaviour
         if (_health <= 0) {
             _isDead = true;
             _animator.SetTrigger(AnimDeathTrigger);
+            onDeath.Invoke();
         }
         else {
             _knockback = hitKnockback;
@@ -70,6 +74,7 @@ public class EnemyController : MonoBehaviour
         
         if (vectorToTarget.magnitude > MarginForReachingTarget) {
             movement = vectorToTarget.normalized * speed;
+            _animator.SetFloat(AnimXVelocity, movement.x);
         } else if (walkToTarget) {
             walkToTarget = null;
         }
@@ -79,7 +84,6 @@ public class EnemyController : MonoBehaviour
         movement += _knockback;
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
-        _animator.SetFloat(AnimXVelocity, _rb.velocity.x);
         _rb.velocity = movement;
     }
 }

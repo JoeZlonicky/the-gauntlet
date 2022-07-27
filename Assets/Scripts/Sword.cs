@@ -11,7 +11,7 @@ public class Sword : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Enemy")) {
             EnemyController enemy = col.transform.GetComponent<EnemyController>();
-            Vector2 knockback = (enemy.transform.position - transform.position).normalized * knockbackAmount;
+            Vector2 knockback = ((Vector2)(enemy.transform.position - transform.position)).normalized * knockbackAmount;
             enemy.TakeDamage(damage, knockback);
         }
     }

@@ -17,9 +17,4 @@ public class CrowdMember : MonoBehaviour
         _animator.Play("cheering", -1, random);
 
     }
-
-    private void OnEnable()
-    {
-        
-    }
 }

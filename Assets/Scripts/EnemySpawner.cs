@@ -13,6 +13,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform rightWalkToTarget;
 
     private bool _spawnRight;
+    private const float SpawnDelay = 3.0f;
 
     public void Start()
     {
@@ -31,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
 
             _spawnRight = !_spawnRight;
             
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(SpawnDelay);
         }
     }
 }
