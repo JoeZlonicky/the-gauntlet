@@ -3822,7 +3822,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1182888554}
-  orc: {fileID: 8983767740152145838, guid: 71a7b67dd27739e4dadcdffd8b2c7c09, type: 3}
+  orc: {fileID: 8983767740152145838, guid: 8a975c2b22f63b54b96fc590ca56f4cf, type: 3}
+  minion: {fileID: 8983767740152145838, guid: 4a3f9efab0e1c5f4399a862f2a216562, type: 3}
   leftSpawnPoint: {fileID: 16964664}
   rightSpawnPoint: {fileID: 968906842}
   leftWalkToTarget: {fileID: 1820300738}

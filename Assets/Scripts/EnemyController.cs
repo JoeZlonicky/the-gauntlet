@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     public PlayerController player;
     public int maxHealth = 2;
     public float speed = 2.5f;
+    public float knockbackRecoveryRate = 0.15f;
 
     public UnityEvent onDeath;
     
@@ -23,7 +24,6 @@ public class EnemyController : MonoBehaviour
     private Animator _animator;
     public ParticleSystem hitParticlesPrefab;
     
-    private const float KnockbackRecoveryRate = 0.15f;
     private const float MarginForReachingTarget = 0.2f;
     private int _health;
     private bool _isDead;
@@ -83,7 +83,7 @@ public class EnemyController : MonoBehaviour
         _animator.SetBool(AnimIsMoving, walkToTarget != null || player != null);
 
         movement += _knockback;
-        _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
+        _knockback = Vector2.Lerp(_knockback, Vector2.zero, knockbackRecoveryRate);
         
         _rb.velocity = movement;
     }

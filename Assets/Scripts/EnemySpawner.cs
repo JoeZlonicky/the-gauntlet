@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
     public PlayerController player;
     public EnemyController orc;
+    public EnemyController minion;
     public Transform leftSpawnPoint;
     public Transform rightSpawnPoint;
     public Transform leftWalkToTarget;
@@ -26,7 +28,9 @@ public class EnemySpawner : MonoBehaviour
             if (player.isDead) {
                 break;
             }
-            EnemyController enemy = Instantiate(orc, _spawnRight ? rightSpawnPoint.position : leftSpawnPoint.position, Quaternion.identity);
+
+            EnemyController enemyType = Random.Range(0.0f, 1.0f) < 0.5 ? orc : minion;
+            EnemyController enemy = Instantiate(enemyType, _spawnRight ? rightSpawnPoint.position : leftSpawnPoint.position, Quaternion.identity);
             enemy.walkToTarget = _spawnRight ? rightWalkToTarget : leftWalkToTarget;
             enemy.player = player;
 
