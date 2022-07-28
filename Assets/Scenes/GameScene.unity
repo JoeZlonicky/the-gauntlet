@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 65051484}
   - component: {fileID: 65051483}
   m_Layer: 5
-  m_Name: PressAnything (1)
+  m_Name: WillYouTryAgain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Will You Try Your luck again?
+  m_text: Will You Try Your luck... again?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d46a2e2c3824b9143a4afcd4e29854db, type: 2}
   m_sharedMaterial: {fileID: -4060750427625825358, guid: d46a2e2c3824b9143a4afcd4e29854db, type: 2}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3822,12 +3822,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1182888554}
-  orc: {fileID: 8983767740152145838, guid: 8a975c2b22f63b54b96fc590ca56f4cf, type: 3}
+  orc: {fileID: 8983767740152145838, guid: 71a7b67dd27739e4dadcdffd8b2c7c09, type: 3}
+  ogre: {fileID: 8983767740152145838, guid: 8a975c2b22f63b54b96fc590ca56f4cf, type: 3}
   minion: {fileID: 8983767740152145838, guid: 4a3f9efab0e1c5f4399a862f2a216562, type: 3}
   leftSpawnPoint: {fileID: 16964664}
   rightSpawnPoint: {fileID: 968906842}
   leftWalkToTarget: {fileID: 1820300738}
   rightWalkToTarget: {fileID: 1768335110}
+  timeBetweenEnemiesInWave: 0.25
+  beginnerWavesStartTime: 30
+  intermediateWavesStartTime: 75
+  hardWavesStartTime: 210
+  startWaves:
+  - numOrcs: 1
+    numOgres: 0
+    numMinions: 0
+  - numOrcs: 0
+    numOgres: 0
+    numMinions: 2
+  beginnerWaves:
+  - numOrcs: 2
+    numOgres: 0
+    numMinions: 0
+  - numOrcs: 1
+    numOgres: 0
+    numMinions: 2
+  intermediateWaves:
+  - numOrcs: 3
+    numOgres: 0
+    numMinions: 0
+  - numOrcs: 2
+    numOgres: 0
+    numMinions: 2
+  - numOrcs: 1
+    numOgres: 0
+    numMinions: 4
+  - numOrcs: 0
+    numOgres: 0
+    numMinions: 6
+  - numOrcs: 2
+    numOgres: 0
+    numMinions: 2
+  hardWaves:
+  - numOrcs: 4
+    numOgres: 0
+    numMinions: 2
+  - numOrcs: 1
+    numOgres: 1
+    numMinions: 0
+  - numOrcs: 0
+    numOgres: 1
+    numMinions: 2
+  - numOrcs: 1
+    numOgres: 1
+    numMinions: 6
+  finalWave:
+    numOrcs: 2
+    numOgres: 3
+    numMinions: 4
+  finalWaveKilled:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &148437939
 GameObject:
   m_ObjectHideFlags: 0
@@ -12184,7 +12239,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1056964607
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -12502,7 +12557,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -15011,7 +15066,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -15125,6 +15180,9 @@ MonoBehaviour:
   timerUI: {fileID: 1377790110}
   player: {fileID: 1182888554}
   menus: {fileID: 374233197}
+  enemySpawner: {fileID: 102865212}
+  gameLength: 10
+  timeBetweenWaves: 5
 --- !u!1 &2083368248
 GameObject:
   m_ObjectHideFlags: 0

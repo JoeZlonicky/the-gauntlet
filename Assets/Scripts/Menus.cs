@@ -12,6 +12,7 @@ public class Menus : MonoBehaviour
     private Animator _animator;
     private static readonly int GameOverTrigger = Animator.StringToHash("gameOverTrigger");
     private static readonly int KeyPressTrigger = Animator.StringToHash("keyPressTrigger");
+    private static readonly int VictoryTrigger = Animator.StringToHash("victoryTrigger");
 
     private void Start()
     {
@@ -22,6 +23,8 @@ public class Menus : MonoBehaviour
     {
         if (waitingForKeypressToContinue && Input.anyKey) {
             if (_animator.GetCurrentAnimatorStateInfo(0).IsName("game_over")) {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            } else if (_animator.GetCurrentAnimatorStateInfo(0).IsName("victory")) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else {
@@ -34,5 +37,10 @@ public class Menus : MonoBehaviour
     public void GameOver()
     {
         _animator.SetTrigger(GameOverTrigger);
+    }
+
+    public void Victory()
+    {
+        _animator.SetTrigger(VictoryTrigger);
     }
 }
