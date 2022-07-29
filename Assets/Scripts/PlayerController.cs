@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // Roll
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Time.timeScale > 0f && Input.GetKeyDown(KeyCode.Space)) {
             if (Time.time - _lastRollTime > RollCooldown) {
                 _lastRollTime = Time.time;
                 _isRolling = true;
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Attack
-        if (Input.GetMouseButtonDown(0)) {
+        if (Time.timeScale > 0f && Input.GetMouseButtonDown(0)) {
             if (Time.time - _lastAttackTime > AttackCooldown) {
                 _lastAttackTime = Time.time;
                 _isAttacking = true;
