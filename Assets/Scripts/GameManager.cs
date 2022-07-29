@@ -18,12 +18,13 @@ public class GameManager : MonoBehaviour
     private float _timer;
     private bool _timerIsEnabled;
     private int _waveNumber;
+    private bool _isPaused;
+    private float _timeScaleBeforePause;
 
     private void Start()
     {
         _timer = 0.0f;
         _waveNumber = 0;
-        _timerIsEnabled = true;
         player.onDeath.AddListener(PlayerDeath);
         player.onDeathFinished.AddListener(PlayerDeathFinished);
         enemySpawner.finalWaveKilled.AddListener(FinalWaveCompleted);
@@ -50,6 +51,26 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (_isPaused) {
+                Time.timeScale = _timeScaleBeforePause;
+                _isPaused = false;
+                menus.Unpause();
+            }
+            else {
+                _timeScaleBeforePause = Time.timeScale;
+                Time.timeScale = 0f;
+                _isPaused = true;
+                menus.Pause();
+            }
+        }
+    }
+
+    public void StartTimer()
+    {
+        _timerIsEnabled = true;
+        enemySpawner.SpawnWave(_timer);
     }
 
     private void PlayerDeath()
@@ -60,12 +81,14 @@ public class GameManager : MonoBehaviour
 
     private void PlayerDeathFinished()
     {
-        Time.timeScale = 1.0f;
+        Time.timeScale = 1f;
         menus.GameOver();
+        player.DisableInput();
     }
 
     private void FinalWaveCompleted()
     {
         menus.Victory();
+        player.DisableInput();
     }
 }

@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
     public float knockbackRecoveryRate = 0.15f;
 
     public UnityEvent onDeath;
+    public UnityEvent onDeathFinished;
     
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
     private static readonly int AnimDeathTrigger = Animator.StringToHash("deathTrigger");
@@ -51,6 +52,7 @@ public class EnemyController : MonoBehaviour
     public void DeathFinished()
     {
         Destroy(gameObject);
+        onDeathFinished.Invoke();
     }
 
     private void Start()

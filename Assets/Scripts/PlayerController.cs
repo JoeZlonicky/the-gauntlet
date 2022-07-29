@@ -20,16 +20,22 @@ public class PlayerController : MonoBehaviour
 
     public UnityEvent onDeath;
     public UnityEvent onDeathFinished;
+    public UnityEvent onMovementKeyUsed;
+    public UnityEvent onLeftAttackUsed;
+    public UnityEvent onRightAttackUsed;
+    public UnityEvent onRollUsed;
     
     private static readonly int AnimIsMoving = Animator.StringToHash("isMoving");
     private static readonly int AnimXVelocity = Animator.StringToHash("xVelocity");
     private static readonly int AnimRollTrigger = Animator.StringToHash("rollTrigger");
     private static readonly int AnimAttackTrigger = Animator.StringToHash("attackTrigger");
     private static readonly int AnimIsAttacking = Animator.StringToHash("isAttacking");
+    private static readonly int AnimIsRolling = Animator.StringToHash("isRolling");
     private static readonly int AnimForceLeftDirection = Animator.StringToHash("forceLeftDirection"); 
     private static readonly int AnimForceRightDirection = Animator.StringToHash("forceRightDirection");
     private static readonly int AnimDeathTrigger = Animator.StringToHash("deathTrigger");
     private static readonly int AnimHitTrigger = Animator.StringToHash("hitTrigger");
+    private static readonly int AnimIsMouseRightOfPlayer = Animator.StringToHash("isMouseRightOfPlayer");
     
     private const float RollCooldown = 0.5f;
     private const float KnockbackRecoveryRate = 0.15f;
@@ -49,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _lastDirection = Vector2.right;
     private Vector2 _knockback;
     [HideInInspector] public bool isDead;
-
+    
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -70,6 +76,14 @@ public class PlayerController : MonoBehaviour
                 _lastRollTime = Time.time;
                 _isRolling = true;
                 _animator.SetTrigger(AnimRollTrigger);
+                if (_lastDirection.x > 0f) {
+                    _animator.SetTrigger(AnimForceRightDirection);
+                } else if (_lastDirection.x < 0f) {
+                    _animator.SetTrigger(AnimForceLeftDirection);
+                }
+                _animator.SetBool(AnimIsRolling, _isRolling);
+                onRollUsed.Invoke();
+                
             }
         }
 
@@ -100,17 +114,23 @@ public class PlayerController : MonoBehaviour
             float xInput = Input.GetAxisRaw("Horizontal");
             float yInput = Input.GetAxisRaw("Vertical");
             movement = new Vector2(xInput, yInput).normalized * moveSpeed;
+            if (movement.magnitude > 0.1) {
+                onMovementKeyUsed.Invoke();
+            }
         }
         
-        if (!_isRolling && movement.magnitude > 0.1) {
-            _lastDirection = movement.normalized;
+        if (!_isRolling) {
+            if (movement.magnitude > 0.1) {
+                _lastDirection = movement.normalized;
+            }
+            _animator.SetBool(AnimIsMouseRightOfPlayer, IsMouseRightOfPlayer());
             _animator.SetFloat(AnimXVelocity, movement.x);
         }
         
         movement += _knockback;
         _knockback = Vector2.Lerp(_knockback, Vector2.zero, KnockbackRecoveryRate);
         
-        _animator.SetBool(AnimIsMoving,  _rb.velocity.magnitude > 0.1);
+        _animator.SetBool(AnimIsMoving,  movement.magnitude > 0.1);
 
         _rb.velocity = movement;
     }
@@ -119,12 +139,13 @@ public class PlayerController : MonoBehaviour
     {
         _animator.ResetTrigger(AnimForceRightDirection);
         _animator.ResetTrigger(AnimForceLeftDirection);
-        float mouseDistance = camera.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x;
-        if (mouseDistance >= 0.0) {
+        if (IsMouseRightOfPlayer()) {
             _animator.SetTrigger(AnimForceRightDirection);
+            onRightAttackUsed.Invoke();
         }
         else {
             _animator.SetTrigger(AnimForceLeftDirection);
+            onLeftAttackUsed.Invoke();
         }
     }
 
@@ -149,10 +170,16 @@ public class PlayerController : MonoBehaviour
             _knockback = hitKnockback;
         }
     }
+
+    private bool IsMouseRightOfPlayer()
+    {
+        return camera.ScreenToWorldPoint(Input.mousePosition).x - transform.position.x >= 0f;
+    }
     
     public void RollAnimationEnded()
     {
         _isRolling = false;
+        _animator.SetBool(AnimIsRolling, _isRolling);
     }
 
     public void AttackAnimationEnded()
@@ -164,5 +191,13 @@ public class PlayerController : MonoBehaviour
     public void DeathFinished()
     {
         onDeathFinished.Invoke();
+    }
+
+    public void DisableInput()
+    {
+        _rb.velocity = Vector2.zero;
+        _animator.SetFloat(AnimXVelocity, 0f);
+        _animator.SetBool(AnimIsMoving,  false);
+        enabled = false;
     }
 }

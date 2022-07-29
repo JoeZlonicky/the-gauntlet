@@ -12,10 +12,7 @@ public class EnemySpawner : MonoBehaviour
     public EnemyController orc;
     public EnemyController ogre;
     public EnemyController minion;
-    public Transform leftSpawnPoint;
-    public Transform rightSpawnPoint;
-    public Transform leftWalkToTarget;
-    public Transform rightWalkToTarget;
+    public SpawnPoint[] spawnPoints;
     public float timeBetweenEnemiesInWave = 0.25f;
     public float beginnerWavesStartTime = 30.0f;
     public float intermediateWavesStartTime = 75.0f;
@@ -75,11 +72,12 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(EnemyController enemyType)
     {
-        var spawnRight = Random.Range(0.0f, 1.0f) > 0.5f;
-        EnemyController enemy = Instantiate(enemyType, spawnRight ? rightSpawnPoint.position : leftSpawnPoint.position, Quaternion.identity);
-        enemy.walkToTarget = spawnRight ? rightWalkToTarget : leftWalkToTarget;
+        var spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        var walkToPosition = spawn.walkTo.transform;
+        EnemyController enemy = Instantiate(enemyType, spawn.transform.position, Quaternion.identity);
+        enemy.walkToTarget = walkToPosition;
         enemy.player = player;
-        enemy.onDeath.AddListener(EnemyDied);
+        enemy.onDeathFinished.AddListener(EnemyDied);
         ++_numEnemiesAlive;
     }
 
