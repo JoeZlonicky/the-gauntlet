@@ -12,6 +12,8 @@ public class EnemyController : MonoBehaviour
     public int maxHealth = 2;
     public float speed = 2.5f;
     public float knockbackRecoveryRate = 0.15f;
+    public AudioSource hitSfx;
+    public AudioSource deathSfx;
 
     public UnityEvent onDeath;
     public UnityEvent onDeathFinished;
@@ -43,9 +45,11 @@ public class EnemyController : MonoBehaviour
             _isDead = true;
             _animator.SetTrigger(AnimDeathTrigger);
             onDeath.Invoke();
+            deathSfx.Play();
         }
         else {
             _knockback = hitKnockback;
+            hitSfx.Play();
         }
     }
 

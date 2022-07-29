@@ -5,6 +5,7 @@ using System.Globalization;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
         player.onDeath.AddListener(PlayerDeath);
         player.onDeathFinished.AddListener(PlayerDeathFinished);
         enemySpawner.finalWaveKilled.AddListener(FinalWaveCompleted);
+        Random.InitState(DateTime.Now.Millisecond);
     }
 
     private void Update()
@@ -70,7 +72,6 @@ public class GameManager : MonoBehaviour
     public void StartTimer()
     {
         _timerIsEnabled = true;
-        enemySpawner.SpawnWave(_timer);
     }
 
     private void PlayerDeath()

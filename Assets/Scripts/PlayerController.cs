@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     public new Camera camera; // For determining attack direction
     public HealthBar healthBar;
     public ParticleSystem hitParticlesPrefab;
+    public AudioSource swingSfx;
+    public AudioSource swingSfx2;
+    public AudioSource rollSfx;
 
     public UnityEvent onDeath;
     public UnityEvent onDeathFinished;
@@ -51,6 +54,7 @@ public class PlayerController : MonoBehaviour
     private bool _isAttacking;
     private float _lastAttackTime;
     private float _lastTimeHit;
+    private bool _useSecondarySwingSfx;
     
     private Vector2 _lastDirection = Vector2.right;
     private Vector2 _knockback;
@@ -83,7 +87,7 @@ public class PlayerController : MonoBehaviour
                 }
                 _animator.SetBool(AnimIsRolling, _isRolling);
                 onRollUsed.Invoke();
-                
+                rollSfx.Play();
             }
         }
 
@@ -94,6 +98,14 @@ public class PlayerController : MonoBehaviour
                 _isAttacking = true;
                 _animator.SetTrigger(AnimAttackTrigger);
                 _animator.SetBool(AnimIsAttacking, _isAttacking);
+                if (_useSecondarySwingSfx) {
+                    swingSfx2.Play();
+                }
+                else {
+                    swingSfx.Play();
+                }
+
+                _useSecondarySwingSfx = !_useSecondarySwingSfx;
                 FaceAttackDirection();
             }
         }
@@ -149,14 +161,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount, Vector2 hitKnockback = default)
+    public bool TakeDamage(int amount, Vector2 hitKnockback = default)
     {
         if (Time.time - _lastTimeHit < HitInvincibilityTime || isDead || _isRolling) {
-            return;
+            return false;
         }
         
         _lastTimeHit = Time.time;
-        _health = Math.Max(_health - 1, 0);
+        _health = Math.Max(_health - amount, 0);
         healthBar.SetHearts(_health);
         
         Instantiate(hitParticlesPrefab, transform);
@@ -169,6 +181,8 @@ public class PlayerController : MonoBehaviour
         else {
             _knockback = hitKnockback;
         }
+
+        return true;
     }
 
     private bool IsMouseRightOfPlayer()

@@ -7,6 +7,8 @@ public class EnemyAttack : MonoBehaviour
 {
     public int damage;
     public float knockbackAmount;
+    public AudioSource attackSfx;
+
     private void OnTriggerEnter2D(Collider2D col)
     {
         Attack(col);
@@ -22,7 +24,10 @@ public class EnemyAttack : MonoBehaviour
         if (col.gameObject.CompareTag("Player")) {
             PlayerController player = col.transform.GetComponent<PlayerController>();
             Vector2 knockback = ((Vector2)(player.transform.position - transform.position)).normalized * knockbackAmount;
-            player.TakeDamage(damage, knockback);
+            bool attackSuccessful = player.TakeDamage(damage, knockback);
+            if (attackSuccessful) {
+                attackSfx.Play();
+            }
         }
     }
 }
