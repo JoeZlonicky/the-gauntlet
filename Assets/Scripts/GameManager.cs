@@ -11,11 +11,11 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI timerUI;
     public PlayerController player;
-    public Menus menus;
     public EnemySpawner enemySpawner;
     public float gameLength = 300.0f;
     public float timeBetweenWaves = 5.0f;
 
+    private Menus menus;
     private float _timer;
     private bool _timerIsEnabled;
     private int _waveNumber;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        menus = Menus.Instance;
         _timer = 0.0f;
         _waveNumber = 0;
         player.onDeath.AddListener(PlayerDeath);

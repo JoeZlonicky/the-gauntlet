@@ -19,16 +19,19 @@ public class Menus : MonoBehaviour
 
     private static Menus _instance;  // Keep track to make sure duplicates are made with DontDestroyOnLoad
 
-    private void Start()
+    public static Menus Instance { get { return _instance; } }
+
+    private void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        _instance = this;
         _animator = GetComponent<Animator>();
         DontDestroyOnLoad(this);
-        if (_instance == null) {
-            _instance = this;
-        }
-        else {
-            Destroy(this);
-        }
     }
 
     void Update()

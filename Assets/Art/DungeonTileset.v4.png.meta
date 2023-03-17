@@ -165,7 +165,7 @@ TextureImporter:
       213: -1978951044186804732
     second: dagger_0
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -186,6 +186,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -224,6 +225,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -251,6 +253,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1267,7 +1281,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 9245ad9d76946fbc0800000000000000
-      internalID: -3749728929353935831
+      internalID: -7289178230066185966
       vertices: []
       indices: 
       edges: []
@@ -1309,7 +1323,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 558d67b522da52b60800000000000000
-      internalID: 7720767499271592021
+      internalID: -1912144619101381759
       vertices: []
       indices: 
       edges: []
@@ -1429,6 +1443,62 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      banner_0: -8692228762548456283
+      brown_particle_small: -1912144619101381759
+      dagger_0: -1978951044186804732
+      dark: 2857873242733712898
+      enemy_0: 2763244182077342437
+      enemy_1: -6319393426538760602
+      enemy_2: -2081291769424912824
+      ground_spot_0: -800686842929227457
+      ground_spot_1: -6141280678521812898
+      ground_spot_10: -5672666647308417556
+      ground_spot_11: 2593573270248394144
+      ground_spot_12: 4830606414283678369
+      ground_spot_2: 2298191880400452126
+      ground_spot_3: 8245465149595649383
+      ground_spot_4: -6358845467593299547
+      ground_spot_5: 1013621846267410877
+      ground_spot_6: -6192085622612493811
+      ground_spot_7: -9031994943870674622
+      ground_spot_8: -2509975212903405719
+      ground_spot_9: 8338025300438457908
+      npc_0: 517443846479655045
+      npc_1: 75219405406849241
+      npc_2: -8279965869576285037
+      npc_3: -7044026620786789807
+      npc_4: 8526862630856676484
+      npc_5: 8610513538920993762
+      npc_6: -6337524439892748839
+      npc_7: 7623738540066507115
+      pillar_bare: -7470899843589083406
+      pillar_wall: -868762800048534585
+      player: -4232372475135122399
+      shadow_0: -6551654886005469338
+      shadow_1: 5693515234986140630
+      shadow_2: 6181981638290029999
+      shadow_3: -3673189741182772994
+      shadow_4: 542337242664076883
+      shadow_5: 8832848503712447490
+      shadow_6: -986424282861872554
+      shadow_7: -2078678474297002077
+      sword_0: -8168956363209427361
+      tile_0: 7553454342033508592
+      tile_1: 8130407264197782721
+      tile_2: -7289178230066185966
+      tile_3: -6492401980576355018
+      tile_4: 8059560349256711922
+      wall_0: 2069415083503212722
+      wall_1: 4468469751869076317
+      wall_2: -1067665510509528309
+      wall_3: -8248157553010839229
+      wall_4: -6845980268273053146
+      wall_5: 7401702256180518906
+      wall_6: -6487126016164858639
+      wall_7: 4690310226930030548
+      white_particle_dot: -3599238453727975460
+      white_trail: 3329062865249818464
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
