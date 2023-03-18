@@ -1,33 +1,34 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class EnemyAttack : MonoBehaviour
 {
     public int damage;
     public float knockbackAmount;
-    public AudioSource attackSfx;
+    public AudioSource attackSFX;
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        Attack(col);
+        Attack(collider.gameObject);
     }
 
-    private void OnTriggerStay2D(Collider2D col)
+    private void OnTriggerStay2D(Collider2D collider)
     {
-        Attack(col);
+        Attack(collider.gameObject);
     }
 
-    private void Attack(Collider2D col)
+    private void Attack(GameObject gameObject)
     {
-        if (col.gameObject.CompareTag("Player")) {
-            PlayerController player = col.transform.GetComponent<PlayerController>();
-            Vector2 knockback = ((Vector2)(player.transform.position - transform.position)).normalized * knockbackAmount;
-            bool attackSuccessful = player.TakeDamage(damage, knockback);
-            if (attackSuccessful) {
-                attackSfx.Play();
-            }
+        if (!gameObject.TryGetComponent<PlayerController>(out var player)) return;
+
+        Vector2 toPlayer = player.transform.position - transform.position;
+        Vector2 knockback = toPlayer.normalized * knockbackAmount;
+
+        bool attackSuccessful = player.TakeDamage(damage, knockback);
+
+        // Don't want to play SFX if player is invulnerable to the damage
+        if (attackSuccessful) {
+            attackSFX.Play();
         }
     }
 }

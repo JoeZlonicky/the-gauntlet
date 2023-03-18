@@ -1,13 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
-using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
@@ -69,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Can't attack or roll while doing either
+        // Can't attack while rolling and vice-versa
         if (_isAttacking || _isRolling || isDead) {
             return;
         }

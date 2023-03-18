@@ -1,10 +1,16 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+
+[Serializable]
+public class EnemyWave
+{
+    public int numOrcs;
+    public int numOgres;
+    public int numMinions;
+}
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -88,12 +94,4 @@ public class EnemySpawner : MonoBehaviour
             finalWaveKilled.Invoke();
         }
     }
-}
-
-[Serializable]
-public class EnemyWave
-{
-    public int numOrcs;
-    public int numOgres;
-    public int numMinions;
 }

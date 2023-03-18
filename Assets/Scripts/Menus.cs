@@ -1,15 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 public class Menus : MonoBehaviour
 {
     public bool waitingForKeypressToContinue;
-    
+
+    public static Menus Instance { get { return _instance; } }
+
     private Animator _animator;
     private static readonly int GameOverTrigger = Animator.StringToHash("gameOverTrigger");
     private static readonly int KeyPressTrigger = Animator.StringToHash("keyPressTrigger");
@@ -17,9 +14,7 @@ public class Menus : MonoBehaviour
     private static readonly int PauseTrigger = Animator.StringToHash("pauseTrigger");
     private static readonly int UnpauseTrigger = Animator.StringToHash("unpauseTrigger");
 
-    private static Menus _instance;  // Keep track to make sure duplicates are made with DontDestroyOnLoad
-
-    public static Menus Instance { get { return _instance; } }
+    private static Menus _instance;  // Keep track to make sure duplicates aren't made with DontDestroyOnLoad
 
     private void Awake()
     {

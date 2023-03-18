@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,15 +10,18 @@ public class TutorialManager : MonoBehaviour
     public Tutorial attackingTutorial;
 
     public UnityEvent completedAllTutorials;
-    private int _numOfTutorialsLeft = 5;
+    private int _numOfTutorialsLeft;
 
     private void Start()
     {
-        rollTutorial.completed.AddListener(TutorialCompleted);
-        wasdTutorial.completed.AddListener(TutorialCompleted);
-        leftAttackTutorial.completed.AddListener(TutorialCompleted);
-        rightAttackTutorial.completed.AddListener(TutorialCompleted);
-        attackingTutorial.completed.AddListener(TutorialCompleted);
+        Tutorial[] tutorials = {rollTutorial, wasdTutorial, leftAttackTutorial, rightAttackTutorial, attackingTutorial};
+
+        _numOfTutorialsLeft = 0;
+        foreach (Tutorial tutorial in tutorials)
+        {
+            tutorial.completed.AddListener(TutorialCompleted);
+            ++_numOfTutorialsLeft;
+        }
     }
 
     private void TutorialCompleted()
@@ -30,6 +31,7 @@ public class TutorialManager : MonoBehaviour
         }
 
         --_numOfTutorialsLeft;
+
         if (_numOfTutorialsLeft == 0) {
             completedAllTutorials.Invoke();
         }

@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
 {
@@ -27,13 +23,52 @@ public class EnemyController : MonoBehaviour
     private Animator _animator;
     public ParticleSystem hitParticlesPrefab;
     
-    private const float MarginForReachingTarget = 0.2f;
+    private const float _marginForReachingTarget = 0.2f;  // So enemies don't jitter when right on target
     private int _health;
     private bool _isDead;
-    private bool _playerDeathFinished;
+    private bool _playerDeathFinished;  // Don't chase player's dead body
     
     private Vector2 _knockback;
-    
+
+    private void Start()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+        _health = maxHealth;
+        player.onDeathFinished.AddListener(OnPlayerDeathFinished);
+    }
+
+    private void FixedUpdate()
+    {
+        if (_isDead || (walkToTarget == null && player == null || _playerDeathFinished))
+        {
+            _rb.velocity = Vector2.zero;
+            return;
+        }
+
+        Vector2 movement = default;
+
+        Vector3 target = walkToTarget ? walkToTarget.position : player.transform.position;
+        Vector2 vectorToTarget = (target - transform.position);
+
+        if (vectorToTarget.magnitude > _marginForReachingTarget)
+        {
+            movement = vectorToTarget.normalized * speed;
+            _animator.SetFloat(AnimXVelocity, movement.x);
+        }
+        else if (walkToTarget)
+        {
+            walkToTarget = null;
+        }
+
+        _animator.SetBool(AnimIsMoving, walkToTarget != null || player != null);
+
+        movement += _knockback;
+        _knockback = Vector2.Lerp(_knockback, Vector2.zero, knockbackRecoveryRate);
+
+        _rb.velocity = movement;
+    }
+
     public void TakeDamage(int amount, Vector2 hitKnockback = default)
     {
         if (_isDead) return;
@@ -57,41 +92,6 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(gameObject);
         onDeathFinished.Invoke();
-    }
-
-    private void Start()
-    {
-        _rb = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
-        _health = maxHealth;
-        player.onDeathFinished.AddListener(OnPlayerDeathFinished);
-    }
-
-    private void FixedUpdate()
-    {
-        if (_isDead || (walkToTarget == null && player == null || _playerDeathFinished)) {
-            _rb.velocity = Vector2.zero;
-            return;
-        }
-        
-        Vector2 movement = default;
-
-        Vector3 target = walkToTarget ? walkToTarget.position : player.transform.position;
-        Vector2 vectorToTarget = (target - transform.position);
-        
-        if (vectorToTarget.magnitude > MarginForReachingTarget) {
-            movement = vectorToTarget.normalized * speed;
-            _animator.SetFloat(AnimXVelocity, movement.x);
-        } else if (walkToTarget) {
-            walkToTarget = null;
-        }
-        
-        _animator.SetBool(AnimIsMoving, walkToTarget != null || player != null);
-
-        movement += _knockback;
-        _knockback = Vector2.Lerp(_knockback, Vector2.zero, knockbackRecoveryRate);
-        
-        _rb.velocity = movement;
     }
 
     private void OnPlayerDeathFinished()

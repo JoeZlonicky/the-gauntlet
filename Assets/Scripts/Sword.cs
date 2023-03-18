@@ -1,18 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
     public int damage;
     public float knockbackAmount;
+
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.CompareTag("Enemy")) {
-            EnemyController enemy = col.transform.GetComponent<EnemyController>();
-            Vector2 knockback = ((Vector2)(enemy.transform.position - transform.position)).normalized * knockbackAmount;
-            enemy.TakeDamage(damage, knockback);
-        }
+        if (!col.TryGetComponent<EnemyController>(out var enemy)) return;
+
+        Vector2 toEnemy = enemy.transform.position - transform.position;
+        Vector2 knockback = toEnemy.normalized * knockbackAmount;
+        enemy.TakeDamage(damage, knockback);
     }
 }
